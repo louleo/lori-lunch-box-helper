@@ -1,0 +1,29 @@
+{
+  "name": "lori-lunch-box",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "create:log": "pnpx tsx ./scripts/create-food-log.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "gts lint",
+    "clean": "gts clean && pnpx tsx ./scripts/clean.ts",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.0",
+  "dependencies": {
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "gts": "^7.0.0",
+    "typescript": "^5.6.3",
+    "@types/node": "^22.7.5"
+  }
+}

@@ -1,0 +1,7 @@
+node_modules
+meal-logs/*
+!meal-logs/.gitkeep
+kids-meal-ideas.md
+shopping-list.md
+build
+.idea
