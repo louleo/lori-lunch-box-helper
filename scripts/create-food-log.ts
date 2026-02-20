@@ -18,12 +18,10 @@ const createTemplateConent = (date: string) => {
 
 ## Breakfast
 
-
 ## Lunch
 
-
 ## Dinner
-    `;
+`;
 };
 
 (async function () {

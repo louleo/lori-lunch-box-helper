@@ -25,8 +25,7 @@ function getLogs(days: number = 7) {
         const filePath = path.join(MEAL_LOGS_DIR, file);
         const content = fs.readFileSync(filePath, 'utf-8');
         console.log(`--- File: ${file} ---`);
-        console.log(content);
-        console.log('\n');
+        console.log(content.split(/\r?\n/).filter(s => s.trim() !== '').join('\n'));
     });
 }
 
