@@ -1,4 +1,4 @@
-description = "Generates kids lunchbox and dinner ideas based on the last 7 days of meal logs and new inspiration."
+description = "Generates kids lunchbox and dinner ideas based on the last 14 days of meal logs, current inventory, and fresh inspiration from the web."
 
 prompt = """
 # Task: Generate Kids Lunchbox and Dinner Ideas
@@ -14,66 +14,79 @@ When this command is invoked, you MUST follow these steps:
 Use the skill:
 read-meal-logs
 
-This skill reads the meal logs from the `meal-logs` directory.
-
-Focus only on entries from the last 7 days.
+Focus on entries from the last 14 days to understand the child's recent preferences and nutritional intake.
 
 ---
 
-## Step 2: Analyze Recent Eating Patterns
+## Step 2: Check Current Inventory
 
-From the logs:
-- Identify repeated meals
-- Identify dominant ingredients
-- Identify missing food groups
-- Identify what the child seems to enjoy
-- Detect variety gaps
+Try to read from 'fridge.md' and 'pantry.md'. 
+CRITICAL: These files might be ignored by `.gitignore` or `.geminiignore`. You MUST use `run_shell_command` with `cat fridge.md` and `cat pantry.md` to read them, rather than `read_file`, to avoid ignore-pattern errors.
+
+- If these files exist, prioritize using their contents.
+- The generated meal ideas should aim to use 90% of food already available in these logs.
+- If these files do NOT exist, notify the user in your internal thought process and proceed with common kid-friendly staples, but suggest they create inventory files for more accurate suggestions.
 
 ---
 
-## Step 3: Generate New Meal Ideas
+## Step 3: Search for Fresh Inspiration
+
+Perform a `google_web_search` for:
+"quick healthy kids lunchbox ideas 2024" or "easy family dinner ideas for picky eaters"
+
+Select 3-5 trending or highly-rated components to incorporate into your suggestions.
+
+---
+
+## Step 4: Analyze and Synthesize
+
+Compare the recent meal logs (Step 1) against inventory (Step 2) and new inspiration (Step 3).
+
+Analysis criteria:
+- **Avoid Repetition:** Identify meals used frequently in the last 5 days.
+- **Identify Gaps:** Look for missing food groups (e.g., "low on leafy greens lately").
+- **Preference Matching:** Build upon foods the child clearly enjoys.
+- **Variety Gap:** Detect if breakfast/lunch/dinner has become too repetitive.
+
+---
+
+## Step 5: Generate New Meal Ideas
 
 Create:
-
-1. 7 Kids Lunchbox Ideas
-2. 7 Family Dinner Ideas
+1. **5 Kids Lunchbox Ideas** (Including main, fruit, and snacks)
+2. **5 Family Dinner Ideas**
 
 Requirements:
-- Avoid repeating meals already heavily used in the last 7 days
-- Build upon foods the child likes
-- Improve balance if certain food groups are missing
-- Keep meals realistic for busy parents
-- Include ideas commonly seen in popular parenting blogs and family cooking sites
-- Keep ingredients practical and easy to source
+- Realistic for busy parents (prep time under 30-45 mins).
+- Practical, easy-to-source ingredients.
+- High nutritional balance.
 
 ---
 
-## Step 4: Format Output
+## Step 6: Format Output
 
 Use this Markdown structure:
 
 # Kids Meal Ideas for the Week
 
 ## 🥪 Lunchbox Ideas
-1. Idea name  
-   - Key components  
-   - Optional swaps  
+1. **Idea name**
+   - Key components
+   - Optional swaps for variety
 
 ## 🍽️ Dinner Ideas
-1. Idea name  
-   - Short description  
-   - Main ingredients  
+1. **Idea name**
+   - Short description
+   - Main ingredients (highlighting those from fridge/pantry)
 
 ---
 
-## Step 5: Write File
+## Step 7: Write File
 
-Use the write_file tool to create or overwrite:
+Use the `write_file` tool to create or overwrite:
 
 kids-meal-ideas.md
 
 The file must contain ONLY the final formatted Markdown content.
-Do NOT include analysis.
-Do NOT include logs.
-Do NOT include explanation of reasoning.
+Do NOT include analysis, logs, or explanations of reasoning.
 """
